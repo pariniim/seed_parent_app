@@ -55,7 +55,7 @@ const DEFAULT_SETTINGS = {
     voice: "FEMALE",
     lang: "en",
     sleepTimer: "off",
-    avgLength: "medium",
+    avgLength: "4min",
     wifiSsid: "",
     wifiPass: "",
     ledBrightness: 180,
@@ -800,6 +800,26 @@ document.addEventListener('DOMContentLoaded', () => {
         const excludedKeys = Object.keys(appState.beads).filter(k => appState.beads[k] === 0);
         const excluded = excludedKeys.map(k => characterMap[k].label);
 
+        // Dynamically compute target length and instruction based on setting
+        const duration = appState.settings.avgLength;
+        let wordTarget = "260-380 words";
+        let durationLabel = "4 min.";
+        let lengthInstruction = "Strictly 260-380 words (uses sensory expansion details).";
+
+        if (duration === "2min") {
+            wordTarget = "140-200 words";
+            durationLabel = "2 min.";
+            lengthInstruction = "Strictly 140-200 words (short story, quick read).";
+        } else if (duration === "6min") {
+            wordTarget = "450-600 words";
+            durationLabel = "6 min.";
+            lengthInstruction = "Strictly 450-600 words (deep narrative, sensory expansion).";
+        } else {
+            wordTarget = "300-420 words";
+            durationLabel = "4 min.";
+            lengthInstruction = "Strictly 300-420 words (medium complexity, steady pace).";
+        }
+
         const systemHeader = `🌱 SEED — Final System Prompt v2.2\n` +
                              `4-Category Model (Fruits & Vegetables United) — With Length Enforcement + patches\n` +
                              `------------------------------------------------------------------------\n` +
@@ -808,7 +828,7 @@ document.addEventListener('DOMContentLoaded', () => {
                              `2. STORY WORLD: Natural, whimsical but strictly non-magical/non-supernatural.\n` +
                              `3. CATEGORIES: Meat/Fish (Animal), Fruits & Veg (Plant), Grains (Grain), Dairy (Dairy).\n` +
                              `4. PACING SHAPE: Balanced = Calm & cooperative. Unbalanced = Lively & dynamic.\n` +
-                             `5. LENGTH ENFORCEMENT: Strictly 260-380 words (uses sensory expansion details).`;
+                             `5. LENGTH ENFORCEMENT: ${lengthInstruction}`;
 
         const userPayload = `\n\n========================================================================\n` +
                             `[COMPILED API USER PAYLOAD]\n` +
@@ -820,7 +840,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             `- Plant Group (Fruits & Veg): ${appState.beads.plants} beads\n` +
                             `- Total Bead Count: ${meta.total}/20\n` +
                             `- Tone Pacing: ${meta.balance}\n` +
-                            `- Length Target: 260-380 words (strict)\n\n` +
+                            `- Length Target: ${wordTarget} (strict, approx. ${durationLabel})\n\n` +
                             `## Character Weights & Hierarchy:\n` +
                             `- Protagonist: ${meta.protagonist} (Weight: ${appState.beads[meta.protagonistKey]}/5)\n` +
                             `- Secondary Characters: ${secondaries.length > 0 ? secondaries.join(', ') : 'None'}\n` +
