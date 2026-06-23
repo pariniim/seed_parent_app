@@ -945,6 +945,28 @@ document.addEventListener('DOMContentLoaded', () => {
         currentBridge.connect(address);
     });
 
+    // Mobile Tab Navigation click handlers
+    const mobileTabButtons = document.querySelectorAll('.mobile-tab-bar .tab-item');
+    const mobileTabPanels = document.querySelectorAll('.mobile-tab-panel');
+
+    mobileTabButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            mobileTabButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            const targetTab = btn.dataset.mobileTab;
+            
+            mobileTabPanels.forEach(panel => {
+                panel.classList.remove('active');
+                if (panel.id === `panel-${targetTab}`) {
+                    panel.classList.add('active');
+                }
+            });
+
+            writeToConsole(`[SYSTEM] Switched mobile view to: ${targetTab}`, 'system');
+        });
+    });
+
     // Auto connect mock mode on page load
     currentBridge.onStatusChange((status) => {
         updateConnectionBadgeUI(status);
