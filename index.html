@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Seed Parent Control | Storybox IoT Dashboard</title>
+    <title>Seed Parent Companion | Storybox Transparency Portal</title>
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -35,106 +36,296 @@
 
                 <!-- Web Application Contents -->
                 <div class="dashboard-container">
-                    <!-- Header -->
-                    <header class="app-header">
-                        <div class="logo-area">
-                            <div class="logo-icon">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
-                                </svg>
-                            </div>
-                            <div class="logo-text">
-                                <h1>Seed Parent</h1>
-                                <span>Storybox IoT</span>
-                            </div>
+                    
+                    <!-- App Header Bar -->
+                    <div class="app-header-bar">
+                        <div class="app-header-title">
+                            <span class="icon-seed">🌱</span>
+                            <span class="logo-name">Seed Companion</span>
                         </div>
+                        <div class="device-mini-badge" id="app-device-badge">
+                            <span class="status-dot simulated" id="mini-status-dot"></span>
+                            <span class="device-name" id="mini-status-label">Simulating</span>
+                        </div>
+                    </div>
+
+                    <!-- Main App Screens Scroll Area -->
+                    <div class="app-body">
                         
-                        <div class="header-widgets">
-                            <!-- Connection Status Badge -->
-                            <div class="connection-status-badge simulated" id="connection-status">
-                                <span class="status-dot animate-pulse"></span>
-                                <span class="status-label">Sim</span>
+                        <!-- SCREEN 1: HOME SCREEN -->
+                        <section class="app-screen active" id="screen-home">
+                            <div class="welcome-section">
+                                <h2>Welcome back, Sylvia! 👋</h2>
+                                <p>Check in on Liam's storytelling adventures today.</p>
                             </div>
-                            
-                            <!-- Battery Widget -->
-                            <div class="battery-widget" id="battery-widget">
-                                <div class="battery-level-container">
-                                    <div class="battery-bar" id="battery-fill" style="width: 82%;"></div>
-                                </div>
-                                <span class="battery-text font-mono" id="battery-percentage">82%</span>
-                                <svg class="battery-charging-icon hide" id="battery-charge-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
-                                    <polyline points="17 6 23 6 23 12"></polyline>
-                                </svg>
-                            </div>
-                        </div>
-                    </header>
 
-                    <!-- Main Workspace (Stacks vertically inside the phone viewport) -->
-                    <main class="dashboard-grid">
-                        <!-- Settings Panel (TX) -->
-                        <section class="panel-card controls-panel mobile-tab-panel active" id="panel-controls">
-                            <div class="panel-header">
-                                <h2>Device Settings</h2>
-                                <span class="panel-subtitle">Parameters sent to Arduino</span>
+                            <!-- STORYBOX STATUS CARD -->
+                            <div class="info-card status-card">
+                                <div class="card-header">
+                                    <h3>Storybox Live Link</h3>
+                                    <span class="status-indicator simulated" id="home-status-badge">Simulator Active</span>
+                                </div>
+                                <div class="status-grid">
+                                    <div class="status-item">
+                                        <span class="label">Battery</span>
+                                        <span class="val font-mono" id="status-val-battery">82%</span>
+                                    </div>
+                                    <div class="status-item">
+                                        <span class="label">Signal RSSI</span>
+                                        <span class="val font-mono" id="status-val-wifi">-42 dBm</span>
+                                    </div>
+                                    <div class="status-item">
+                                        <span class="label">Loudness</span>
+                                        <span class="val font-mono" id="status-val-volume">65%</span>
+                                    </div>
+                                </div>
                             </div>
-                            
-                            <div class="control-scroll-container">
-                                <!-- Connection Bridge Settings -->
-                                <div class="control-section connection-config">
-                                    <h3>Connection Bridge</h3>
-                                    <div class="input-row">
-                                        <div class="input-group">
-                                            <label for="bridge-type">Connection Type</label>
-                                            <select id="bridge-type">
-                                                <option value="mock" selected>Simulated Demo Mode</option>
-                                                <option value="websocket">Remote WebSocket Server</option>
-                                                <option value="http">Remote REST API Client</option>
-                                            </select>
-                                        </div>
+
+                            <!-- CURRENT STORYBOX ACTIVITY -->
+                            <div class="info-card activity-card">
+                                <div class="card-header">
+                                    <h3>Live Device Activity</h3>
+                                    <span class="activity-pulse-badge" id="home-live-status-badge">Idle</span>
+                                </div>
+                                <div class="live-status-container">
+                                    <!-- Ring visualization -->
+                                    <div class="live-ring-icon" id="home-live-ring">
+                                        <div class="inner-icon" id="home-live-icon">💤</div>
                                     </div>
-                                    <div class="input-row hide" id="remote-address-row">
-                                        <div class="input-group">
-                                            <label for="remote-address">Server URL</label>
-                                            <input type="text" id="remote-address" value="ws://192.168.1.20:8080">
-                                        </div>
+                                    <div class="live-status-info">
+                                        <h4 id="home-live-status-title">Storybox is Idle</h4>
+                                        <p id="home-live-status-desc">No beads currently stacked. Liam can plug in food beads on the physical box to start.</p>
                                     </div>
-                                    <button id="btn-connect" class="btn-primary">Connect Board</button>
                                 </div>
 
-                                <hr class="divider">
-
-                                <!-- Audio Settings -->
-                                <div class="control-section">
-                                    <h3>Audio & Voice Settings</h3>
-                                    
-                                    <!-- Volume Slider -->
-                                    <div class="control-item">
-                                        <div class="control-label-row">
-                                            <label for="device-volume">Speaker Volume</label>
-                                            <span class="badge-value" id="volume-val">65%</span>
+                                <div class="bead-reading-display">
+                                    <h5>Current Resistor Bead Stack:</h5>
+                                    <div class="bead-indicator-pills">
+                                        <div class="bead-pill meat" id="home-pill-meat">
+                                            <span class="dot"></span> Animal: <strong class="count" id="home-count-meat">0</strong>
                                         </div>
-                                        <div class="slider-container">
-                                            <input type="range" id="device-volume" min="0" max="100" value="65">
-                                            <div class="slider-fill" id="volume-fill"></div>
+                                        <div class="bead-pill veggies" id="home-pill-veggies">
+                                            <span class="dot"></span> Plant: <strong class="count" id="home-count-plants">0</strong>
                                         </div>
-                                    </div>
-
-                                    <!-- Story Voice Select -->
-                                    <div class="control-item">
-                                        <div class="control-label-row">
-                                            <label>Story Voice Narrator</label>
-                                            <span class="badge-value" id="voice-val">Female</span>
+                                        <div class="bead-pill grains" id="home-pill-grains">
+                                            <span class="dot"></span> Grain: <strong class="count" id="home-count-grains">0</strong>
                                         </div>
-                                        <div class="segmented-control">
-                                            <button class="seg-btn active" data-voice="female">Female</button>
-                                            <button class="seg-btn" data-voice="male">Male</button>
+                                        <div class="bead-pill dairy" id="home-pill-dairy">
+                                            <span class="dot"></span> Dairy: <strong class="count" id="home-count-dairy">0</strong>
                                         </div>
                                     </div>
+                                </div>
+                            </div>
 
-                                    <!-- Language Select -->
-                                    <div class="control-item">
-                                        <label for="device-lang">Narrator Language</label>
+                            <!-- QUICK STATS ROW -->
+                            <div class="quick-stats-row">
+                                <div class="stat-box">
+                                    <span class="num font-mono" id="stat-count-today">3</span>
+                                    <span class="label">Chapters Today</span>
+                                </div>
+                                <div class="stat-box">
+                                    <span class="num font-mono" id="stat-count-favorites">1</span>
+                                    <span class="label">Favorite Stories</span>
+                                </div>
+                            </div>
+
+                            <!-- WEEKLY NUTRITION COACH PROMO BANNER -->
+                            <div class="weekly-insights-promo active" id="home-insights-card">
+                                <div class="insights-promo-content">
+                                    <h4>Weekly Nutrition Balance</h4>
+                                    <p id="home-insights-text">Liam has chosen a high ratio of Grains & Carbohydrates 🌾 this week. Tap to view detailed coaching advice!</p>
+                                </div>
+                                <button class="btn-chevron" id="btn-go-to-insights">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="9 18 15 12 9 6"></polyline>
+                                    </svg>
+                                </button>
+                            </div>
+                        </section>
+
+                        <!-- SCREEN 2: STORIES ARCHIVE -->
+                        <section class="app-screen" id="screen-stories">
+                            <div class="screen-header">
+                                <h2>Story Archive</h2>
+                                <p>Access and review all stories Liam has generated.</p>
+                            </div>
+
+                            <!-- Search and Filters -->
+                            <div class="search-filter-container">
+                                <div class="search-box-wrapper">
+                                    <input type="text" id="stories-search-input" placeholder="Search by title or character...">
+                                </div>
+                                <div class="filter-badges-container" id="filter-badges-bar">
+                                    <button class="filter-badge active" data-filter="all">All</button>
+                                    <button class="filter-badge" data-filter="meat">🍖 Animal</button>
+                                    <button class="filter-badge" data-filter="plants">🥦 Plant</button>
+                                    <button class="filter-badge" data-filter="grains">🌾 Grain</button>
+                                    <button class="filter-badge" data-filter="dairy">🥛 Dairy</button>
+                                    <button class="filter-badge" data-filter="fav">❤️ Favorites</button>
+                                </div>
+                            </div>
+
+                            <!-- Stories List -->
+                            <div class="stories-list" id="archive-stories-list">
+                                <!-- Dynamic stories loaded here -->
+                            </div>
+                        </section>
+
+                        <!-- SCREEN 3: NUTRITION INSIGHTS -->
+                        <section class="app-screen" id="screen-insights">
+                            <div class="screen-header">
+                                <h2>Nutrition Insights</h2>
+                                <p>Liam's dietary choices translated into storytelling play.</p>
+                            </div>
+
+                            <!-- DONUT CHART CARD -->
+                            <div class="info-card chart-card">
+                                <h3>Liam's Story Food Balance</h3>
+                                <div class="chart-flex">
+                                    <div class="chart-container-donut">
+                                        <div class="donut-chart" id="insights-donut-chart" style="--meat-pct: 25%; --plants-pct: 25%; --grains-pct: 25%; --dairy-pct: 25%;">
+                                            <div class="donut-inner">
+                                                <span class="donut-center-num font-mono" id="donut-total-beads">4</span>
+                                                <span class="donut-center-label">Total Beads</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="chart-legend" id="chart-legend-list">
+                                        <div class="legend-item meat">
+                                            <span class="bullet"></span>
+                                            <span class="lbl">Animal (Meat/Fish)</span>
+                                            <span class="count font-mono" id="legend-count-meat">1 (25%)</span>
+                                        </div>
+                                        <div class="legend-item plants">
+                                            <span class="bullet"></span>
+                                            <span class="lbl">Plant (Fruits/Veg)</span>
+                                            <span class="count font-mono" id="legend-count-plants">1 (25%)</span>
+                                        </div>
+                                        <div class="legend-item grains">
+                                            <span class="bullet"></span>
+                                            <span class="lbl">Grain (Grains)</span>
+                                            <span class="count font-mono" id="legend-count-grains">1 (25%)</span>
+                                        </div>
+                                        <div class="legend-item dairy">
+                                            <span class="bullet"></span>
+                                            <span class="lbl">Dairy Products</span>
+                                            <span class="count font-mono" id="legend-count-dairy">1 (25%)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- COACH ASSESSMENT CARD -->
+                            <div class="info-card coach-card">
+                                <div class="coach-header">
+                                    <span class="coach-avatar">🍎</span>
+                                    <h3>Parent Coach Assessment</h3>
+                                </div>
+                                <p id="coach-assessment-text" class="coach-text">
+                                    Liam's stories show a balanced variety of animal, grains, dairy, and plants today! He is building wonderful sensory foundations in play.
+                                </p>
+                            </div>
+
+                            <!-- MILESTONE BADGES -->
+                            <div class="info-card badges-card">
+                                <h3>Milestone Badges</h3>
+                                <div class="badges-grid">
+                                    <div class="badge-item locked" id="badge-first-story">
+                                        <div class="badge-icon">📖</div>
+                                        <div class="badge-info">
+                                            <h4>First Chapter</h4>
+                                            <p>Generate first story segment</p>
+                                        </div>
+                                    </div>
+                                    <div class="badge-item locked" id="badge-rainbow-plate">
+                                        <div class="badge-icon">🌈</div>
+                                        <div class="badge-info">
+                                            <h4>Rainbow Choice</h4>
+                                            <p>Use all 4 bead groups in one story</p>
+                                        </div>
+                                    </div>
+                                    <div class="badge-item locked" id="badge-veggie-explorer">
+                                        <div class="badge-icon">🥦</div>
+                                        <div class="badge-info">
+                                            <h4>Veggie Explorer</h4>
+                                            <p>Generate 5 veggie-heavy stories</p>
+                                        </div>
+                                    </div>
+                                    <div class="badge-item locked" id="badge-perfect-balance">
+                                        <div class="badge-icon">⚖️</div>
+                                        <div class="badge-info">
+                                            <h4>Perfect Harmony</h4>
+                                            <p>Play a story with equal counts</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- SCREEN 4: SETTINGS SCREEN -->
+                        <section class="app-screen" id="screen-settings">
+                            <div class="screen-header">
+                                <h2>Parent & Device Setup</h2>
+                                <p>Configure physical settings and link companion bridges.</p>
+                            </div>
+
+                            <!-- CONNECTION BRIDGE -->
+                            <div class="settings-group">
+                                <h3>Connection Bridge</h3>
+                                <div class="setting-item" style="display: block;">
+                                    <div class="form-group" style="margin-bottom: 8px;">
+                                        <label for="bridge-type">Bridge Type</label>
+                                        <select id="bridge-type">
+                                            <option value="mock" selected>Simulated Demo Mode</option>
+                                            <option value="websocket">Remote WebSocket Server</option>
+                                            <option value="http">Remote REST API Client</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group hide" id="remote-address-row" style="margin-bottom: 8px;">
+                                        <label for="remote-address">Server Address</label>
+                                        <input type="text" id="remote-address" value="ws://192.168.1.20:8080">
+                                    </div>
+                                    <button id="btn-connect" class="btn-settings-action">Connect Board</button>
+                                </div>
+                            </div>
+
+                            <!-- PARENTAL CONTROLS -->
+                            <div class="settings-group">
+                                <h3>Parental Locks & Audio</h3>
+                                
+                                <!-- Speakers Volume -->
+                                <div class="setting-item">
+                                    <div class="setting-info">
+                                        <h4>Speaker Volume</h4>
+                                        <p>Limits local physical speaker loudness</p>
+                                    </div>
+                                    <div class="setting-slider-container">
+                                        <input type="range" id="device-volume" min="0" max="100" value="65">
+                                        <span class="value-bubble" id="volume-val">65%</span>
+                                        <div class="slider-fill" id="volume-fill"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Story Voice Selector -->
+                                <div class="setting-item">
+                                    <div class="setting-info">
+                                        <h4>Narrator Voice</h4>
+                                        <p>Select voice style read by TTS</p>
+                                    </div>
+                                    <div class="setting-segmented-control">
+                                        <button class="seg-btn active" data-voice="female">Female</button>
+                                        <button class="seg-btn" data-voice="male">Male</button>
+                                        <span class="hide" id="voice-val">Female</span>
+                                    </div>
+                                </div>
+
+                                <!-- Language Select -->
+                                <div class="setting-item">
+                                    <div class="setting-info">
+                                        <h4>Narrator Language</h4>
+                                        <p>Active audio language translation</p>
+                                    </div>
+                                    <div class="setting-select-control">
                                         <select id="device-lang">
                                             <option value="en" selected>English (US)</option>
                                             <option value="it">Italian (IT)</option>
@@ -142,10 +333,15 @@
                                             <option value="fr">French (FR)</option>
                                         </select>
                                     </div>
+                                </div>
 
-                                    <!-- Sleep Timer -->
-                                    <div class="control-item">
-                                        <label for="sleep-timer">Sleep Timer</label>
+                                <!-- Sleep Timer -->
+                                <div class="setting-item">
+                                    <div class="setting-info">
+                                        <h4>Sleep Timer</h4>
+                                        <p>Turn off device after playback idle</p>
+                                    </div>
+                                    <div class="setting-select-control">
                                         <select id="sleep-timer">
                                             <option value="off" selected>Timer Off</option>
                                             <option value="15">15 Minutes</option>
@@ -155,252 +351,253 @@
                                     </div>
                                 </div>
 
-                                <hr class="divider">
+                                <!-- Average Length -->
+                                <div class="setting-item">
+                                    <div class="setting-info">
+                                        <h4>Average Story Duration</h4>
+                                        <p>Target duration length for AI</p>
+                                    </div>
+                                    <div class="setting-segmented-control">
+                                        <button class="seg-btn" data-length="short">Short</button>
+                                        <button class="seg-btn active" data-length="medium">Medium</button>
+                                        <button class="seg-btn" data-length="long">Long</button>
+                                        <span class="hide" id="length-val">Medium (7m)</span>
+                                    </div>
+                                </div>
+                            </div>
 
-                                <!-- Story Pacing & Duration -->
-                                <div class="control-section">
-                                    <h3>Story Duration Settings</h3>
-                                    
-                                    <!-- Avg Story Length -->
-                                    <div class="control-item">
-                                        <div class="control-label-row">
-                                            <label>Average Story Length</label>
-                                            <span class="badge-value" id="length-val">Medium (7m)</span>
-                                        </div>
-                                        <div class="segmented-control">
-                                            <button class="seg-btn" data-length="short">Short</button>
-                                            <button class="seg-btn active" data-length="medium">Medium</button>
-                                            <button class="seg-btn" data-length="long">Long</button>
-                                        </div>
+                            <!-- LED Ring Settings -->
+                            <div class="settings-group">
+                                <h3>LED Ring Showcase</h3>
+                                
+                                <!-- Brightness -->
+                                <div class="setting-item">
+                                    <div class="setting-info">
+                                        <h4>LED Brightness</h4>
+                                        <p>Brilliance of the NeoPixel glow</p>
+                                    </div>
+                                    <div class="setting-slider-container">
+                                        <input type="range" id="led-brightness" min="0" max="255" value="180">
+                                        <span class="value-bubble" id="led-brightness-val">180</span>
+                                        <div class="slider-fill" id="led-brightness-fill"></div>
                                     </div>
                                 </div>
 
-                                <hr class="divider">
-
-                                <!-- LED Settings -->
-                                <div class="control-section">
-                                    <h3>NeoPixel LED Display</h3>
-
-                                    <!-- LED Brightness -->
-                                    <div class="control-item">
-                                        <div class="control-label-row">
-                                            <label for="led-brightness">Ring LED Brightness</label>
-                                            <span class="badge-value" id="led-brightness-val">180</span>
-                                        </div>
-                                        <div class="slider-container">
-                                            <input type="range" id="led-brightness" min="0" max="255" value="180">
-                                            <div class="slider-fill" id="led-brightness-fill"></div>
-                                        </div>
+                                <!-- Animation Speed -->
+                                <div class="setting-item">
+                                    <div class="setting-info">
+                                        <h4>Animation Speed</h4>
+                                        <p>Pulse rotational frequency</p>
                                     </div>
-
-                                    <!-- LED Speed -->
-                                    <div class="control-item">
-                                        <div class="control-label-row">
-                                            <label for="led-speed">Animation Speed</label>
-                                            <span class="badge-value" id="led-speed-val">1.5x</span>
-                                        </div>
-                                        <div class="slider-container">
-                                            <input type="range" id="led-speed" min="5" max="30" value="15" step="1">
-                                            <div class="slider-fill" id="led-speed-fill"></div>
-                                        </div>
-                                    </div>
-
-                                    <!-- LED Color -->
-                                    <div class="control-item">
-                                        <div class="control-label-row">
-                                            <label for="led-color">Aura Glow Color</label>
-                                            <span class="badge-value font-mono" id="led-color-val">#0EA5E9</span>
-                                        </div>
-                                        <div class="color-picker-container">
-                                            <input type="color" id="led-color" value="#0ea5e9">
-                                            <div class="color-swatches">
-                                                <button class="swatch active" style="background-color: #0ea5e9;" data-color="#0ea5e9"></button>
-                                                <button class="swatch" style="background-color: #ff7a5c;" data-color="#ff7a5c"></button>
-                                                <button class="swatch" style="background-color: #ffd166;" data-color="#ffd166"></button>
-                                                <button class="swatch" style="background-color: #8ac926;" data-color="#8ac926"></button>
-                                            </div>
-                                        </div>
+                                    <div class="setting-slider-container">
+                                        <input type="range" id="led-speed" min="5" max="30" value="15" step="1">
+                                        <span class="value-bubble" id="led-speed-val">1.5x</span>
+                                        <div class="slider-fill" id="led-speed-fill"></div>
                                     </div>
                                 </div>
 
-                                <hr class="divider">
+                                <!-- Led Color Picker -->
+                                <div class="setting-item">
+                                    <div class="setting-info">
+                                        <h4>Aura Glow Color</h4>
+                                        <p>Custom Aura ring color presets</p>
+                                    </div>
+                                    <div class="setting-color-picker">
+                                        <span class="badge-value font-mono hide" id="led-color-val">#0EA5E9</span>
+                                        <input type="color" id="led-color" value="#0ea5e9">
+                                        <div class="color-swatches">
+                                            <button class="swatch active" style="background-color: #0ea5e9;" data-color="#0ea5e9"></button>
+                                            <button class="swatch" style="background-color: #ff7a5c;" data-color="#ff7a5c"></button>
+                                            <button class="swatch" style="background-color: #ffd166;" data-color="#ffd166"></button>
+                                            <button class="swatch" style="background-color: #8ac926;" data-color="#8ac926"></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
-                                <!-- WiFi Setup -->
-                                <div class="control-section wifi-setup-section">
-                                    <h3>Device Wi-Fi Network Setup</h3>
-                                    <div class="input-group">
+                            <!-- Wi-Fi Setup -->
+                            <div class="settings-group">
+                                <h3>Wi-Fi Network Setup</h3>
+                                <div class="setting-item" style="display: block;">
+                                    <div class="form-group" style="margin-bottom: 8px;">
                                         <label for="wifi-ssid">Network SSID</label>
                                         <input type="text" id="wifi-ssid" placeholder="MyHomeWiFi">
                                     </div>
-                                    <div class="input-group">
+                                    <div class="form-group" style="margin-bottom: 12px;">
                                         <label for="wifi-pass">Password</label>
-                                        <input type="password" id="wifi-pass" class="custom-password-field" placeholder="••••••••">
+                                        <input type="password" id="wifi-pass" placeholder="••••••••">
                                     </div>
-                                    <button id="btn-save-wifi" class="btn-primary-small">Update WiFi Credentials</button>
+                                    <button id="btn-save-wifi" class="btn-settings-action">Update WiFi Credentials</button>
+                                </div>
+                            </div>
+
+                            <!-- Calibration & Diagnostics readout -->
+                            <div class="settings-group">
+                                <h3>Diagnostics & CPU Health</h3>
+                                <div class="diagnostics-specs">
+                                    <div class="spec-row">
+                                        <span>CPU temperature</span>
+                                        <strong id="diag-cpu" class="font-mono">34.2 °C</strong>
+                                    </div>
+                                    <div class="spec-row">
+                                        <span>WiFi RSSI Signal</span>
+                                        <strong id="diag-wifi" class="font-mono">-42 dBm</strong>
+                                    </div>
+                                    <div class="spec-row">
+                                        <span>Meat Peg (A0 ADC)</span>
+                                        <strong id="diag-adc-meat" class="font-mono">102</strong>
+                                    </div>
+                                    <div class="spec-row">
+                                        <span>Plant Peg (A1 ADC)</span>
+                                        <strong id="diag-adc-veggies" class="font-mono">98</strong>
+                                    </div>
+                                    <div class="spec-row">
+                                        <span>Grain Peg (A2 ADC)</span>
+                                        <strong id="diag-adc-grains" class="font-mono">105</strong>
+                                    </div>
+                                    <div class="spec-row">
+                                        <span>Dairy Peg (A3 ADC)</span>
+                                        <strong id="diag-adc-dairy" class="font-mono">100</strong>
+                                    </div>
+                                    <button class="btn-settings-action secondary" id="btn-ota-update" style="margin-top: 10px; width: 100%;">Check OTA Updates</button>
+                                </div>
+                            </div>
+
+                            <!-- Debug Terminal Logs -->
+                            <div class="console-wrapper">
+                                <div class="console-actions">
+                                    <div class="console-tab-container">
+                                        <button class="btn-text console-tab active" data-tab="logs">Event Logs</button>
+                                        <button class="btn-text console-tab" data-tab="prompt">AI Prompt</button>
+                                    </div>
+                                    <button id="btn-clear-console" class="btn-text">Clear</button>
+                                </div>
+                                
+                                <!-- Event Logs Output -->
+                                <div class="console-log" id="console-output">
+                                    <div class="log-entry system">[SYSTEM] Parent Companion App Initialized.</div>
+                                    <div class="log-entry system">[SYSTEM] Ready to connect to Storybox.</div>
+                                </div>
+                                
+                                <!-- AI Prompt Compiler Output -->
+                                <div class="console-log hide font-mono" id="prompt-output">
+                                    [AI COMPILER] Prompt template is empty. Adjust physical bead slots.
                                 </div>
                             </div>
                         </section>
 
-                        <!-- Diagnostics, Bead Slot Reader & Logs -->
-                        <section class="panel-card live-panel mobile-tab-panel" id="panel-telemetry">
-                            <div class="panel-header">
-                                <h2>Live Diagnostics</h2>
-                                <span class="panel-subtitle">Storybox Status & Analytics</span>
+                        <!-- SCREEN 5: DETAILED STORY VIEW OVERLAY (Slides in) -->
+                        <section class="app-screen-detail hidden" id="screen-story-detail">
+                            <div class="detail-header">
+                                <button class="btn-back" id="btn-close-detail">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="15 18 9 12 15 6"></polyline>
+                                    </svg> Back
+                                </button>
+                                <button class="btn-fav-detail" id="detail-btn-fav">♡</button>
                             </div>
-                            
-                            <div class="right-panel-scroll">
-                                <!-- Diagnostics Grid -->
-                                <div class="telemetry-section">
-                                    <h3>Hardware Diagnostics</h3>
-                                    <div class="diagnostics-grid">
-                                        <div class="diag-card">
-                                            <span class="diag-title">CPU Temp</span>
-                                            <span class="diag-value font-mono" id="diag-cpu">34.2 °C</span>
+
+                            <div class="detail-scroll-content">
+                                <div class="detail-character-avatar" id="detail-avatar">🐰</div>
+                                <h2 class="detail-title" id="detail-title">Story Title</h2>
+                                <div class="detail-meta">
+                                    <span class="detail-date" id="detail-date">June 19, 7:15 PM</span>
+                                    <span class="detail-wordcount" id="detail-wordcount">320 words</span>
+                                </div>
+
+                                <!-- Bead stack details -->
+                                <div class="detail-beads" id="detail-bead-badges">
+                                    <!-- Dynamically injected bead badges -->
+                                </div>
+
+                                <!-- CUSTOM AUDIO PLAYER -->
+                                <div class="detail-audio-player">
+                                    <div class="player-top">
+                                        <button class="btn-play-pause playing" id="player-play-btn">
+                                            <svg class="play-svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                                            <svg class="pause-svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+                                        </button>
+                                        <div class="player-status-wrapper">
+                                            <span class="player-status" id="player-status-txt">Reading chapter out loud...</span>
+                                            <div class="playback-speed-control">
+                                                Speed:
+                                                <select id="player-speed">
+                                                    <option value="0.75">0.75x</option>
+                                                    <option value="1.0" selected>1.0x</option>
+                                                    <option value="1.25">1.25x</option>
+                                                </select>
+                                            </div>
                                         </div>
-                                        <div class="diag-card">
-                                            <span class="diag-title">WiFi RSSI</span>
-                                            <span class="diag-value font-mono" id="diag-wifi">-42 dBm</span>
-                                        </div>
-                                        <div class="diag-card">
-                                            <span class="diag-title">Audio State</span>
-                                            <span class="diag-value font-mono" id="current-playback-status">Stopped</span>
-                                        </div>
+                                    </div>
+                                    <div class="player-canvas-container">
+                                        <canvas id="player-waveform" width="280" height="40"></canvas>
                                     </div>
                                 </div>
 
-                                <hr class="divider">
-
-                                <!-- Read-Only Physical Bead Reader Status -->
-                                <div class="bead-status-section">
-                                    <div class="section-title-bar">
-                                        <h3>Physical Bead Slots</h3>
-                                        <span class="subtitle-badge">Arduino Link</span>
-                                    </div>
-                                    
-                                    <!-- 4-Category Bead Grid -->
-                                    <div class="bead-grid">
-                                        <!-- Animal Category (Meat/Fish) -->
-                                        <div class="bead-status-card meat" data-bead="meat">
-                                            <div class="card-glow"></div>
-                                            <div class="bead-header">
-                                                <span class="bead-indicator-dot"></span>
-                                                <span class="bead-title">Animal</span>
-                                            </div>
-                                            <div class="bead-meta">
-                                                <span class="bead-label">Meat / Fish</span>
-                                                <span class="bead-count-val font-mono"><strong id="count-meat">0</strong>/5</span>
-                                            </div>
-                                            <div class="bead-progress-track">
-                                                <div class="bead-progress-bar" id="bar-meat" style="width: 0%;"></div>
-                                            </div>
-                                        </div>
-
-                                        <!-- Grain Category (Grains) -->
-                                        <div class="bead-status-card grains" data-bead="grains">
-                                            <div class="card-glow"></div>
-                                            <div class="bead-header">
-                                                <span class="bead-indicator-dot"></span>
-                                                <span class="bead-title">Grain</span>
-                                            </div>
-                                            <div class="bead-meta">
-                                                <span class="bead-label">Whole Grains</span>
-                                                <span class="bead-count-val font-mono"><strong id="count-grains">0</strong>/5</span>
-                                            </div>
-                                            <div class="bead-progress-track">
-                                                <div class="bead-progress-bar" id="bar-grains" style="width: 0%;"></div>
-                                            </div>
-                                        </div>
-
-                                        <!-- Dairy Category (Dairy) -->
-                                        <div class="bead-status-card dairy" data-bead="dairy">
-                                            <div class="card-glow"></div>
-                                            <div class="bead-header">
-                                                <span class="bead-indicator-dot"></span>
-                                                <span class="bead-title">Dairy</span>
-                                            </div>
-                                            <div class="bead-meta">
-                                                <span class="bead-label">Dairy Products</span>
-                                                <span class="bead-count-val font-mono"><strong id="count-dairy">0</strong>/5</span>
-                                            </div>
-                                            <div class="bead-progress-track">
-                                                <div class="bead-progress-bar" id="bar-dairy" style="width: 0%;"></div>
-                                            </div>
-                                        </div>
-
-                                        <!-- Plant Category (Fruits & Veggies) -->
-                                        <div class="bead-status-card plants" data-bead="plants">
-                                            <div class="card-glow"></div>
-                                            <div class="bead-header">
-                                                <span class="bead-indicator-dot"></span>
-                                                <span class="bead-title">Plant</span>
-                                            </div>
-                                            <div class="bead-meta">
-                                                <span class="bead-label">Fruits & Veg</span>
-                                                <span class="bead-count-val font-mono"><strong id="count-plants">0</strong>/5</span>
-                                            </div>
-                                            <div class="bead-progress-track">
-                                                <div class="bead-progress-bar" id="bar-plants" style="width: 0%;"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Computed Story Parameters -->
-                                    <div class="narrative-meta-box">
-                                        <div class="meta-row">
-                                            <span class="meta-label">Protagonist:</span>
-                                            <span class="meta-val font-mono" id="meta-protagonist">None</span>
-                                        </div>
-                                        <div class="meta-row">
-                                            <span class="meta-label">Pacing:</span>
-                                            <span class="meta-val font-mono" id="meta-balance">Empty Rack</span>
-                                        </div>
-                                        <button id="btn-clear-beads" class="btn-text-danger hide">Reset Calibration</button>
-                                    </div>
+                                <!-- TRANSCRIPT TEXT -->
+                                <div class="detail-transcript">
+                                    <h3>Story Transcript</h3>
+                                    <p id="detail-text-body">
+                                        Story content goes here...
+                                    </p>
                                 </div>
 
-                                <hr class="divider">
-
-                                <!-- Debug Console & AI Compiler -->
-                                <div class="console-wrapper">
-                                    <div class="console-actions">
-                                        <div class="console-tab-container">
-                                            <button class="btn-text console-tab active" data-tab="logs">Logs</button>
-                                            <button class="btn-text console-tab" data-tab="prompt">AI Prompt</button>
-                                        </div>
-                                        <button id="btn-clear-console" class="btn-text">Clear</button>
+                                <!-- DIETARY NUTRITIONAL INSIGHTS -->
+                                <div class="detail-nutrition-card">
+                                    <div class="title-row">
+                                        <span class="icon">💡</span>
+                                        <h4>Story Nutrition Context</h4>
                                     </div>
-                                    
-                                    <!-- Event Logs Output -->
-                                    <div class="console-log" id="console-output">
-                                        <div class="log-entry system">[SYSTEM] Parent Companion App Initialized.</div>
-                                        <div class="log-entry system">[SYSTEM] Ready to connect to Storybox.</div>
-                                    </div>
-                                    
-                                    <!-- AI Prompt Compiler Output -->
-                                    <div class="console-log hide font-mono" id="prompt-output">
-                                        [AI COMPILER] Prompt template is empty. Adjust physical bead slots.
-                                    </div>
+                                    <p id="detail-nutrition-desc">
+                                        This story combination indicates Liam is interested in grains and dairy...
+                                    </p>
                                 </div>
+
+                                <!-- PARENT REFLECTIONS / NOTES -->
+                                <div class="detail-notes-card">
+                                    <h4>Parent Notes</h4>
+                                    <p class="notes-desc">Write down what Liam liked or learned from this story:</p>
+                                    <textarea id="detail-notes-input" placeholder="e.g. Liam loved Barnaby Bear's treehouse, he asked to eat oatmeal for breakfast!"></textarea>
+                                    <span class="saved-indicator" id="notes-saved-lbl">Saved automatically</span>
+                                </div>
+
+                                <button class="btn-delete-story" id="detail-btn-delete">Delete Story from Archive</button>
                             </div>
                         </section>
-                    </main>
-                    
-                    <!-- Floating Bottom Navigation for Mobile Apps (iOS layout) -->
-                    <div class="mobile-tab-bar">
-                        <button class="tab-item active" data-mobile-tab="controls">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    </div>
+
+                    <!-- Bottom Navigation Tab Bar (iOS style) -->
+                    <nav class="app-nav-bar" id="app-nav-bar">
+                        <button class="nav-item active" data-target="screen-home">
+                            <svg class="nav-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                            </svg>
+                            <span>Home</span>
+                        </button>
+                        <button class="nav-item" data-target="screen-stories">
+                            <svg class="nav-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                                <path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20"></path>
+                                <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5z"></path>
+                            </svg>
+                            <span>Stories</span>
+                        </button>
+                        <button class="nav-item" data-target="screen-insights">
+                            <svg class="nav-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path>
+                                <path d="M22 12A10 10 0 0 0 12 2v10z"></path>
+                            </svg>
+                            <span>Insights</span>
+                        </button>
+                        <button class="nav-item" data-target="screen-settings">
+                            <svg class="nav-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                                 <circle cx="12" cy="12" r="3"></circle>
                                 <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
                             </svg>
-                            <span>Controls</span>
+                            <span>Settings</span>
                         </button>
-                        <button class="tab-item" data-mobile-tab="telemetry">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
-                            </svg>
-                            <span>Telemetry</span>
-                        </button>
-                    </div>
+                    </nav>
                 </div>
             </div>
 
