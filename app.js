@@ -433,6 +433,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     loadState();
 
+
     // 4-Category Character Dictionary (Seed v2.2)
     const characterMap = {
         meat: { name: "Barnaby Bear", icon: "🐻", label: "Animal", color: "#E76F51", colorLight: "rgba(230, 111, 81, 0.12)" },
@@ -453,8 +454,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const homeStatusBadge = document.getElementById("home-status-badge");
     const miniStatusDot = document.getElementById("mini-status-dot");
     const miniStatusLabel = document.getElementById("mini-status-label");
-    const batteryFill = document.getElementById("battery-fill");
-    const batteryPercentage = document.getElementById("battery-percentage");
+    const batteryFill = document.getElementById("phone-battery-fill");
+    const batteryPercentage = document.getElementById("phone-battery-display");
     
     // Live Activity Displays
     const homeLiveStatusBadge = document.getElementById("home-live-status-badge");
@@ -534,6 +535,30 @@ document.addEventListener('DOMContentLoaded', () => {
     // ======================================================================
     // General UI Helpers & Setup
     // ======================================================================
+
+    // --- Mock Status Bar Clock Synchronization ---
+    const phoneTimeDisplay = document.getElementById("phone-time-display");
+
+    function updatePhoneStatusBar(batteryPercent) {
+        if (phoneTimeDisplay) {
+            const now = new Date();
+            let hrs = now.getHours();
+            let mins = now.getMinutes();
+            hrs = hrs < 10 ? "0" + hrs : hrs;
+            mins = mins < 10 ? "0" + mins : mins;
+            phoneTimeDisplay.textContent = `${hrs}:${mins}`;
+        }
+        
+        if (batteryPercent !== undefined) {
+            if (batteryPercentage) batteryPercentage.textContent = `${batteryPercent}%`;
+            if (batteryFill) batteryFill.style.width = `${batteryPercent}%`;
+        }
+    }
+
+    updatePhoneStatusBar(85);
+    setInterval(() => {
+        updatePhoneStatusBar();
+    }, 10000);
 
     function writeToConsole(message, type = 'system') {
         const entry = document.createElement('div');
@@ -1517,14 +1542,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Update Header battery displays
                 statusValBattery.textContent = `${packet.battery}%`;
-                batteryFill.style.width = `${packet.battery}%`;
-                if (packet.battery < 20) {
-                    batteryFill.style.backgroundColor = 'var(--color-meat)';
-                } else if (packet.battery < 50) {
-                    batteryFill.style.backgroundColor = 'var(--color-grains)';
-                } else {
-                    batteryFill.style.backgroundColor = 'var(--color-veggies)';
-                }
+                
+                // Update Phone Mockup Status Bar
+                updatePhoneStatusBar(packet.battery);
 
                 // Update settings Diagnostics
                 diagCpu.textContent = `${packet.cpu.toFixed(1)} °C`;
@@ -1535,20 +1555,67 @@ document.addEventListener('DOMContentLoaded', () => {
                 const wasPlaying = appState.isPlaying;
                 appState.isPlaying = packet.playing;
 
+                const totalBeads = packet.beads ? Object.values(packet.beads).reduce((a, b) => a + b, 0) : 0;
+
                 if (packet.playing) {
                     homeLiveStatusBadge.textContent = "Active";
                     homeLiveStatusBadge.className = "activity-pulse-badge active";
-                    homeLiveRing.className = "live-ring-icon active";
+                    homeLiveRing.className = "live-ring-icon playing active";
                     homeLiveIcon.textContent = "🔊";
+                    const currentStory = appState.stories[0]; // latest
                     homeLiveTitle.textContent = "Reading Story Aloud";
-                    homeLiveDesc.textContent = "Liam is listening to the story unfold on the Storybox speaker.";
+                    homeLiveDesc.textContent = `Liam is listening to: "${currentStory ? currentStory.title : 'Whimsical story'}"`;
+                    
+                    // Apply dominant glow color to activity ring
+                    let maxCount = 0;
+                    let dominantCat = null;
+                    if (packet.beads) {
+                        Object.keys(packet.beads).forEach(cat => {
+                            if (packet.beads[cat] > maxCount) {
+                                maxCount = packet.beads[cat];
+                                dominantCat = cat;
+                            }
+                        });
+                    }
+                    if (dominantCat && characterMap[dominantCat]) {
+                        homeLiveRing.style.borderColor = characterMap[dominantCat].color;
+                    } else {
+                        homeLiveRing.style.removeProperty("border-color");
+                    }
                 } else {
-                    homeLiveStatusBadge.textContent = "Idle";
-                    homeLiveStatusBadge.className = "activity-pulse-badge";
-                    homeLiveRing.className = "live-ring-icon";
-                    homeLiveIcon.textContent = "💤";
-                    homeLiveTitle.textContent = "Storybox is Idle";
-                    homeLiveDesc.textContent = "No beads currently stacked. Liam can plug in food beads on the physical box to start.";
+                    if (totalBeads > 0) {
+                        homeLiveStatusBadge.textContent = "Loaded";
+                        homeLiveStatusBadge.className = "activity-pulse-badge active";
+                        homeLiveRing.className = "live-ring-icon active";
+                        homeLiveIcon.textContent = "⚖️";
+                        homeLiveTitle.textContent = "Storybox Loaded";
+                        homeLiveDesc.textContent = `Beads stacked (${totalBeads}/20). Liam is ready to start his story!`;
+                        
+                        // Apply dominant glow color to activity ring
+                        let maxCount = 0;
+                        let dominantCat = null;
+                        if (packet.beads) {
+                            Object.keys(packet.beads).forEach(cat => {
+                                if (packet.beads[cat] > maxCount) {
+                                    maxCount = packet.beads[cat];
+                                    dominantCat = cat;
+                                }
+                            });
+                        }
+                        if (dominantCat && characterMap[dominantCat]) {
+                            homeLiveRing.style.borderColor = characterMap[dominantCat].color;
+                        } else {
+                            homeLiveRing.style.removeProperty("border-color");
+                        }
+                    } else {
+                        homeLiveStatusBadge.textContent = "Idle";
+                        homeLiveStatusBadge.className = "activity-pulse-badge";
+                        homeLiveRing.className = "live-ring-icon";
+                        homeLiveIcon.textContent = "💤";
+                        homeLiveTitle.textContent = "Storybox is Idle";
+                        homeLiveDesc.textContent = "No beads currently stacked. Liam can plug in food beads on the physical box to start.";
+                        homeLiveRing.style.removeProperty("border-color");
+                    }
                 }
 
                 // Eject/Update bead status slots
@@ -1583,24 +1650,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateConnectionBadgeUI(status) {
         // Toggle badging indicators
-        homeStatusBadge.className = 'status-indicator ' + status;
+        const badgeClass = status === 'connected' ? 'online' : 'offline';
+        homeStatusBadge.className = 'status-indicator ' + badgeClass;
         miniStatusDot.className = 'status-dot ' + status;
         
         if (status === 'connected') {
-            const labelText = bridgeTypeSelect.value === 'mock' ? 'Simulating' : 'Online';
-            homeStatusBadge.textContent = bridgeTypeSelect.value === 'mock' ? 'Simulator Active' : 'Online Link';
-            miniStatusLabel.textContent = labelText;
+            homeStatusBadge.textContent = 'ONLINE';
+            miniStatusLabel.textContent = 'Storybox';
             btnConnect.textContent = 'Disconnect Board';
             btnConnect.className = 'btn-settings-action secondary';
             writeToConsole('[CONNECTION] Storybox link established.', 'system');
         } else if (status === 'connecting') {
-            homeStatusBadge.textContent = 'Connecting...';
+            homeStatusBadge.textContent = 'CONNECTING';
+            homeStatusBadge.className = 'status-indicator simulated';
             miniStatusLabel.textContent = 'Connecting';
             btnConnect.textContent = 'Connecting...';
             btnConnect.disabled = true;
         } else {
-            homeStatusBadge.textContent = 'Offline';
-            miniStatusLabel.textContent = 'Offline';
+            homeStatusBadge.textContent = 'OFFLINE';
+            miniStatusLabel.textContent = 'Storybox';
             btnConnect.textContent = 'Connect Board';
             btnConnect.className = 'btn-settings-action';
             btnConnect.disabled = false;

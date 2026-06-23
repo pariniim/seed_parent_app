@@ -28,6 +28,18 @@
             <!-- Screen Viewport -->
             <div class="iphone-screen">
                 
+                <!-- Phone Status Bar -->
+                <div class="phone-status-bar">
+                    <span class="phone-time" id="phone-time-display">12:30</span>
+                    <div class="phone-signals">
+                        <svg class="icon-wifi" width="16" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12.55a11 11 0 0 1 14.08 0M1.42 9a16 16 0 0 1 21.16 0M8.53 16.11a5.5 5.5 0 0 1 6.95 0M12 20h.01"/></svg>
+                        <span class="battery-percent" id="phone-battery-display">85%</span>
+                        <div class="battery-icon">
+                            <div class="battery-level" id="phone-battery-fill" style="width: 85%;"></div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Dynamic Island (Floats above screen contents) -->
                 <div class="dynamic-island">
                     <div class="camera-lens"></div>
@@ -41,11 +53,11 @@
                     <div class="app-header-bar">
                         <div class="app-header-title">
                             <span class="icon-seed">🌱</span>
-                            <span class="logo-name">Seed Companion</span>
+                            <span class="logo-name">Seed</span>
                         </div>
                         <div class="device-mini-badge" id="app-device-badge">
                             <span class="status-dot simulated" id="mini-status-dot"></span>
-                            <span class="device-name" id="mini-status-label">Simulating</span>
+                            <span class="device-name" id="mini-status-label">Storybox</span>
                         </div>
                     </div>
 
@@ -60,23 +72,23 @@
                             </div>
 
                             <!-- STORYBOX STATUS CARD -->
-                            <div class="info-card status-card">
+                            <div class="info-card connection-card">
                                 <div class="card-header">
-                                    <h3>Storybox Live Link</h3>
-                                    <span class="status-indicator simulated" id="home-status-badge">Simulator Active</span>
+                                    <h3>Storybox Status</h3>
+                                    <span class="status-indicator online" id="home-status-badge">ONLINE</span>
                                 </div>
                                 <div class="status-grid">
                                     <div class="status-item">
-                                        <span class="label">Battery</span>
-                                        <span class="val font-mono" id="status-val-battery">82%</span>
+                                        <span class="label">BATTERY</span>
+                                        <span class="val font-mono" id="status-val-battery">85%</span>
                                     </div>
                                     <div class="status-item">
-                                        <span class="label">Signal RSSI</span>
-                                        <span class="val font-mono" id="status-val-wifi">-42 dBm</span>
+                                        <span class="label">WI-FI</span>
+                                        <span class="val font-mono" id="status-val-wifi">Strong</span>
                                     </div>
                                     <div class="status-item">
-                                        <span class="label">Loudness</span>
-                                        <span class="val font-mono" id="status-val-volume">65%</span>
+                                        <span class="label">DEVICE VOLUME</span>
+                                        <span class="val font-mono" id="status-val-volume">60%</span>
                                     </div>
                                 </div>
                             </div>
@@ -84,7 +96,7 @@
                             <!-- CURRENT STORYBOX ACTIVITY -->
                             <div class="info-card activity-card">
                                 <div class="card-header">
-                                    <h3>Live Device Activity</h3>
+                                    <h3>Live Activity</h3>
                                     <span class="activity-pulse-badge" id="home-live-status-badge">Idle</span>
                                 </div>
                                 <div class="live-status-container">
@@ -99,16 +111,16 @@
                                 </div>
 
                                 <div class="bead-reading-display">
-                                    <h5>Current Resistor Bead Stack:</h5>
+                                    <h5>Current Bead Stack:</h5>
                                     <div class="bead-indicator-pills">
                                         <div class="bead-pill meat" id="home-pill-meat">
-                                            <span class="dot"></span> Animal: <strong class="count" id="home-count-meat">0</strong>
+                                            <span class="dot"></span> Meat: <strong class="count" id="home-count-meat">0</strong>
                                         </div>
                                         <div class="bead-pill veggies" id="home-pill-veggies">
-                                            <span class="dot"></span> Plant: <strong class="count" id="home-count-plants">0</strong>
+                                            <span class="dot"></span> Veggies: <strong class="count" id="home-count-plants">0</strong>
                                         </div>
                                         <div class="bead-pill grains" id="home-pill-grains">
-                                            <span class="dot"></span> Grain: <strong class="count" id="home-count-grains">0</strong>
+                                            <span class="dot"></span> Grains: <strong class="count" id="home-count-grains">0</strong>
                                         </div>
                                         <div class="bead-pill dairy" id="home-pill-dairy">
                                             <span class="dot"></span> Dairy: <strong class="count" id="home-count-dairy">0</strong>
@@ -121,11 +133,11 @@
                             <div class="quick-stats-row">
                                 <div class="stat-box">
                                     <span class="num font-mono" id="stat-count-today">3</span>
-                                    <span class="label">Chapters Today</span>
+                                    <span class="label">Stories Today</span>
                                 </div>
                                 <div class="stat-box">
                                     <span class="num font-mono" id="stat-count-favorites">1</span>
-                                    <span class="label">Favorite Stories</span>
+                                    <span class="label">Favorites</span>
                                 </div>
                             </div>
 

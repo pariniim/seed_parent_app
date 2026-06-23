@@ -28,6 +28,12 @@
     --color-dairy: #4EA8DE; /* Sky Blue */
     --color-dairy-light: rgba(78, 168, 222, 0.12);
 
+    /* Accent Palette */
+    --accent-cyan: #0ea5e9;
+    --accent-green: #10b981;
+    --accent-orange: #f97316;
+    --accent-magenta: #e76f51;
+
     /* Neutral Accents */
     --text-primary: #2B2D2F;
     --text-secondary: #6A6E73;
@@ -136,7 +142,7 @@ p {
     font-family: var(--font-mono);
 }
 
-.hide {
+.hide, .hidden {
     display: none !important;
 }
 
@@ -233,6 +239,66 @@ p {
     position: relative;
     padding-top: 48px; /* Safe padding for Dynamic Island */
     padding-bottom: 75px; /* Safe padding for Home Indicator / Tab Bar */
+}
+
+/* Phone Status Bar */
+.phone-status-bar {
+    height: 38px;
+    background-color: transparent;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 24px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    position: absolute;
+    top: 10px;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+    user-select: none;
+    pointer-events: none;
+}
+
+.phone-time {
+    color: var(--text-primary);
+}
+
+.phone-signals {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--text-primary);
+}
+
+.battery-percent {
+    font-size: 0.7rem;
+}
+
+.battery-icon {
+    width: 20px;
+    height: 10px;
+    border: 1px solid var(--text-primary);
+    border-radius: 3px;
+    padding: 1px;
+    position: relative;
+}
+
+.battery-icon::after {
+    content: '';
+    position: absolute;
+    right: -3px;
+    top: 2px;
+    width: 2px;
+    height: 4px;
+    background-color: var(--text-primary);
+    border-radius: 0 1px 1px 0;
+}
+
+.battery-level {
+    height: 100%;
+    background-color: var(--text-primary);
+    border-radius: 1px;
 }
 
 /* Dynamic Island */
@@ -412,6 +478,10 @@ p {
     box-shadow: var(--shadow-card);
 }
 
+.connection-card {
+    border-left: 4px solid var(--color-veggies);
+}
+
 .info-card h3 {
     font-size: 0.95rem;
     color: var(--text-primary);
@@ -435,8 +505,8 @@ p {
 }
 
 .status-indicator.simulated { background: rgba(14, 165, 233, 0.08); color: var(--accent-cyan); }
-.status-indicator.connected { background: rgba(16, 185, 129, 0.08); color: var(--accent-green); }
-.status-indicator.disconnected { background: rgba(249, 115, 22, 0.08); color: var(--accent-orange); }
+.status-indicator.connected, .status-indicator.online { background: rgba(91, 130, 102, 0.1); color: var(--brand-primary); }
+.status-indicator.disconnected, .status-indicator.offline { background: rgba(231, 111, 81, 0.1); color: var(--color-meat); }
 
 .status-grid {
     display: grid;
@@ -545,7 +615,7 @@ p {
     padding: 3px 8px;
     border-radius: 12px;
     font-size: 0.7rem;
-    font-weight: 600;
+    font-weight: 500;
     color: var(--text-secondary);
     background-color: var(--bg-panel);
     border: 1px solid var(--border-light);
@@ -555,24 +625,26 @@ p {
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    background-color: var(--text-light);
 }
+
+.bead-pill.meat .dot { background-color: var(--color-meat); }
+.bead-pill.veggies .dot { background-color: var(--color-veggies); }
+.bead-pill.grains .dot { background-color: var(--color-grains); }
+.bead-pill.dairy .dot { background-color: var(--color-dairy); }
 
 .bead-pill .count {
     color: var(--text-primary);
 }
 
-.bead-pill.meat.active { background-color: var(--color-meat-light); border-color: rgba(230, 111, 81, 0.2); color: var(--color-meat); }
-.bead-pill.meat.active .dot { background-color: var(--color-meat); }
+.bead-pill.active {
+    background-color: var(--bg-card);
+    font-weight: 600;
+}
 
-.bead-pill.veggies.active { background-color: var(--color-veggies-light); border-color: rgba(78, 170, 120, 0.2); color: var(--color-veggies); }
-.bead-pill.veggies.active .dot { background-color: var(--color-veggies); }
-
-.bead-pill.grains.active { background-color: var(--color-grains-light); border-color: rgba(233, 196, 106, 0.2); color: var(--color-grains); }
-.bead-pill.grains.active .dot { background-color: var(--color-grains); }
-
-.bead-pill.dairy.active { background-color: var(--color-dairy-light); border-color: rgba(78, 168, 222, 0.2); color: var(--color-dairy); }
-.bead-pill.dairy.active .dot { background-color: var(--color-dairy); }
+.bead-pill.active.meat { border-color: var(--color-meat); color: var(--color-meat); }
+.bead-pill.active.veggies { border-color: var(--color-veggies); color: var(--color-veggies); }
+.bead-pill.active.grains { border-color: var(--color-grains); color: var(--color-grains); }
+.bead-pill.active.dairy { border-color: var(--color-dairy); color: var(--color-dairy); }
 
 /* Stats box row */
 .quick-stats-row {
@@ -1603,6 +1675,10 @@ p {
         border-radius: 0;
         padding-top: env(safe-area-inset-top, 20px);
         padding-bottom: env(safe-area-inset-bottom, 20px);
+    }
+    
+    .phone-status-bar {
+        display: none;
     }
     
     .dynamic-island {
